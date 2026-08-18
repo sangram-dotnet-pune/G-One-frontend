@@ -1,11 +1,12 @@
-// Filename: src/router/AppRouter.jsx
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-// We import the pages we have built so far
-import App from '../App'; // The Guest Chat Entrance we built earlier
+// Import all our pages
+import App from '../App'; // The Guest Chat Entrance
 import AuthPage from '../pages/auth/AuthPage';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
+import OmniDashboard from '../pages/dashboard/OmniDashboard';
+import HealthVaultPage from '../pages/vault/HealthVaultPage'; 
 
 export default function AppRouter() {
   return (
@@ -13,25 +14,34 @@ export default function AppRouter() {
       <Routes>
         
         {/* PUBLIC ROUTES */}
-        {/* The root URL '/' loads our Omni-care Guest Chat */}
+        {/* The Guest Entrance (Home Page) */}
         <Route path="/" element={<App />} />
         
-        {/* The '/auth' URL loads our Login/Register screen */}
+        {/* The Login / Register Page */}
         <Route path="/auth" element={<AuthPage onNavigateBack={() => window.history.back()} />} />
 
-        {/* PROTECTED ROUTES (Placeholder for the next step) */}
-        {/* Notice how we wrap the Health Vault inside our reusable ProtectedRoute */}
+        {/* PROTECTED ROUTES (Requires Login) */}
+        {/* The Central Hub */}
         <Route 
-          path="/vault" 
+          path="/dashboard" 
           element={
             <ProtectedRoute>
-              {/* <HealthVaultPage /> */}
-              <div className="p-10 text-center">Health Vault (Coming Soon)</div>
+              <OmniDashboard />
             </ProtectedRoute>
           } 
         />
 
-        {/* 404 FALLBACK */}
+        {/* The Deep Health Vault */}
+        <Route 
+          path="/vault" 
+          element={
+            <ProtectedRoute>
+              <HealthVaultPage />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* 404 FALLBACK: If user types a random URL, send them to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
         
       </Routes>
